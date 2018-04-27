@@ -3,10 +3,10 @@ package models
 import (
 	"context"
 	"log"
-	"otc/uuid"
 	"time"
 
 	"github.com/crossle/hacker-news-mixin-bot/session"
+	bot "github.com/mixinmessenger/bot-api-go-client"
 )
 
 type Subscriber struct {
@@ -17,7 +17,7 @@ type Subscriber struct {
 func CreateSubscriber(ctx context.Context, userId string) (*Subscriber, error) {
 	subscriber, err := findSubscriberById(ctx, userId)
 	if subscriber == nil {
-		if _, err := uuid.FromString(userId); err != nil {
+		if _, err := bot.FromString(userId); err != nil {
 			return nil, err
 		}
 		user := &Subscriber{
