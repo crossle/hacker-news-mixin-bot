@@ -37,7 +37,7 @@ func sendTopStoryToChannel(ctx context.Context, stats *Stats) {
 	topStory := getTopStory()
 	prevStoryId := stats.getPrevTopStoryId()
 
-	if topStory.ID != prevStoryId {
+	if topStory.ID > prevStoryId {
 		log.Printf("Sending top story to channel...")
 		stats.updatePrevTopStoryId(topStory.ID)
 		subscribers, _ := models.FindSubscribers(ctx)
