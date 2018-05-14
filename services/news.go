@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/base64"
 	"log"
-	"otc/uuid"
 
 	"github.com/crossle/hacker-news-mixin-bot/config"
 	"github.com/crossle/hacker-news-mixin-bot/models"
@@ -44,7 +43,7 @@ func sendTopStoryToChannel(ctx context.Context, stats *Stats) {
 		for _, subscriber := range subscribers {
 			conversationId := bot.UniqueConversationId(config.MixinClientId, subscriber.UserId)
 			data := base64.StdEncoding.EncodeToString([]byte(topStory.Title + " " + topStory.URL))
-			bot.PostMessage(ctx, conversationId, subscriber.UserId, uuid.NewV4().String(), "PLAIN_TEXT", data, config.MixinClientId, config.MixinSessionId, config.MixinPrivateKey)
+			bot.PostMessage(ctx, conversationId, subscriber.UserId, bot.NewV4().String(), "PLAIN_TEXT", data, config.MixinClientId, config.MixinSessionId, config.MixinPrivateKey)
 		}
 	} else {
 		log.Printf("Same top story ID: %d, no message sent.", prevStoryId)
