@@ -27,10 +27,9 @@ func (self *Stats) updatePrevTopStoryId(id int) {
 	self.prevStoryId = id
 }
 
-func getTopStory() h.Story {
+func getTopStoryId() int {
 	topStories, _ := h.GetStories("top")
-	topStory, _ := h.GetItem(topStories[0])
-	return topStory
+	return topStories[0]
 }
 
 func getTopTenStories() []int {
@@ -60,8 +59,7 @@ func sendTopStoryToChannel(ctx context.Context, stats *Stats) {
 	}
 }
 func (service *NewsService) Run(ctx context.Context) error {
-	topStory := getTopStory()
-	stats := &Stats{topStory.ID}
+	stats := &Stats{getTopStoryId()}
 	gocron.Every(5).Minutes().Do(sendTopStoryToChannel, ctx, stats)
 	<-gocron.Start()
 	return nil
