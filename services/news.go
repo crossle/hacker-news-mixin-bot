@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"log"
+	"sort"
 
 	"github.com/crossle/hacker-news-mixin-bot/config"
 	"github.com/crossle/hacker-news-mixin-bot/models"
@@ -32,21 +33,30 @@ func getTopStory() h.Story {
 	return topStory
 }
 
-func sendTopStoryToChannel(ctx context.Context, stats *Stats) {
-	topStory := getTopStory()
-	prevStoryId := stats.getPrevTopStoryId()
+func getTopTenStories() []int {
+	stories, _ := h.GetStories("top")
+	topTen := stories[:10]
+	sort.Ints(topTen)
+	return topTen
+}
 
-	if topStory.ID > prevStoryId {
-		log.Printf("Sending top story to channel...")
-		stats.updatePrevTopStoryId(topStory.ID)
-		subscribers, _ := models.FindSubscribers(ctx)
-		for _, subscriber := range subscribers {
-			conversationId := bot.UniqueConversationId(config.MixinClientId, subscriber.UserId)
-			data := base64.StdEncoding.EncodeToString([]byte(topStory.Title + " " + topStory.URL))
-			bot.PostMessage(ctx, conversationId, subscriber.UserId, bot.NewV4().String(), "PLAIN_TEXT", data, config.MixinClientId, config.MixinSessionId, config.MixinPrivateKey)
+func sendTopStoryToChannel(ctx context.Context, stats *Stats) {
+	prevStoryId := stats.getPrevTopStoryId()
+	topTenStories := getTopTenStories()
+	for _, storyId := range topTenStories {
+		if storyId > prevStoryId {
+			story, _ := h.GetItem(storyId)
+			log.Printf("Sending top story to channel...")
+			stats.updatePrevTopStoryId(story.ID)
+			subscribers, _ := models.FindSubscribers(ctx)
+			for _, subscriber := range subscribers {
+				conversationId := bot.UniqueConversationId(config.MixinClientId, subscriber.UserId)
+				data := base64.StdEncoding.EncodeToString([]byte(story.Title + " " + story.URL))
+				bot.PostMessage(ctx, conversationId, subscriber.UserId, bot.NewV4().String(), "PLAIN_TEXT", data, config.MixinClientId, config.MixinSessionId, config.MixinPrivateKey)
+			}
+		} else {
+			log.Printf("Same top story ID: %d, no message sent.", storyId)
 		}
-	} else {
-		log.Printf("Same top story ID: %d, no message sent.", prevStoryId)
 	}
 }
 func (service *NewsService) Run(ctx context.Context) error {
