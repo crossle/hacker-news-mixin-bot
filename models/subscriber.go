@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
+	bot "github.com/MixinNetwork/bot-api-go-client"
 	"github.com/crossle/hacker-news-mixin-bot/session"
-	bot "github.com/mixinmessenger/bot-api-go-client"
 )
 
 type Subscriber struct {

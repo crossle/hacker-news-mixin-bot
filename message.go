@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 
-	bot "github.com/mixinmessenger/bot-api-go-client"
+	bot "github.com/MixinNetwork/bot-api-go-client"
 
 	"github.com/crossle/hacker-news-mixin-bot/config"
 	"github.com/crossle/hacker-news-mixin-bot/models"

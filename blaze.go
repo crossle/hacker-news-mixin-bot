@@ -10,7 +10,7 @@ import (
 	"github.com/crossle/hacker-news-mixin-bot/durable"
 	"github.com/crossle/hacker-news-mixin-bot/session"
 
-	bot "github.com/mixinmessenger/bot-api-go-client"
+	bot "github.com/MixinNetwork/bot-api-go-client"
 )
 
 func StartBlaze(db *sql.DB) error {

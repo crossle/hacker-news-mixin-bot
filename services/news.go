@@ -6,10 +6,10 @@ import (
 	"log"
 	"sort"
 
+	bot "github.com/MixinNetwork/bot-api-go-client"
 	"github.com/crossle/hacker-news-mixin-bot/config"
 	"github.com/crossle/hacker-news-mixin-bot/models"
 	"github.com/jasonlvhit/gocron"
-	bot "github.com/mixinmessenger/bot-api-go-client"
 	h "github.com/qube81/hackernews-api-go"
 )
 
