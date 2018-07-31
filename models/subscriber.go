@@ -17,7 +17,7 @@ type Subscriber struct {
 func CreateSubscriber(ctx context.Context, userId string) (*Subscriber, error) {
 	subscriber, err := findSubscriberById(ctx, userId)
 	if subscriber == nil {
-		if _, err := bot.FromString(userId); err != nil {
+		if _, err := bot.UuidFromString(userId); err != nil {
 			return nil, err
 		}
 		user := &Subscriber{
