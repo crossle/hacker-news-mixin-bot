@@ -50,6 +50,7 @@ func sendTopStoryToChannel(ctx context.Context, stats *Stats) {
 	topTenStories, err := getTopTenStories()
 	if err != nil {
 		log.Printf("get Top stories")
+		return
 	}
 	for _, storyId := range topTenStories {
 		if storyId > prevStoryId {
