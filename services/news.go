@@ -27,21 +27,30 @@ func (self *Stats) updatePrevTopStoryId(id int) {
 	self.prevStoryId = id
 }
 
-func getTopStoryId() int {
-	topStories, _ := h.GetStories("top")
-	return topStories[0]
+func getTopStoryId() (int, error) {
+	topStories, err := h.GetStories("top")
+	if err != nil {
+		return 18199708, nil
+	}
+	return topStories[0], nil
 }
 
-func getTopTenStories() []int {
-	stories, _ := h.GetStories("top")
+func getTopTenStories() ([]int, error) {
+	stories, err := h.GetStories("top")
+	if err != nil {
+		return nil, err
+	}
 	topTen := stories[:10]
 	sort.Ints(topTen)
-	return topTen
+	return topTen, nil
 }
 
 func sendTopStoryToChannel(ctx context.Context, stats *Stats) {
 	prevStoryId := stats.getPrevTopStoryId()
-	topTenStories := getTopTenStories()
+	topTenStories, err := getTopTenStories()
+	if err != nil {
+		log.Printf("get Top stories")
+	}
 	for _, storyId := range topTenStories {
 		if storyId > prevStoryId {
 			story, _ := h.GetItem(storyId)
@@ -59,7 +68,11 @@ func sendTopStoryToChannel(ctx context.Context, stats *Stats) {
 	}
 }
 func (service *NewsService) Run(ctx context.Context) error {
-	stats := &Stats{getTopStoryId()}
+	storyId, err := getTopStoryId()
+	if err != nil {
+		return nil
+	}
+	stats := &Stats{storyId}
 	gocron.Every(5).Minutes().Do(sendTopStoryToChannel, ctx, stats)
 	<-gocron.Start()
 	return nil
