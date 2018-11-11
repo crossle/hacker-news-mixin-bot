@@ -6,11 +6,10 @@ import (
 	"log"
 	"time"
 
+	bot "github.com/MixinNetwork/bot-api-go-client"
 	"github.com/crossle/hacker-news-mixin-bot/config"
 	"github.com/crossle/hacker-news-mixin-bot/durable"
 	"github.com/crossle/hacker-news-mixin-bot/session"
-
-	bot "github.com/MixinNetwork/bot-api-go-client"
 )
 
 func StartBlaze(db *sql.DB) error {
@@ -24,7 +23,11 @@ func StartBlaze(db *sql.DB) error {
 	defer cancel()
 
 	for {
-		if err := bot.Loop(ctx, ResponseMessage{}, config.MixinClientId, config.MixinSessionId, config.MixinPrivateKey); err != nil {
+		blazeClient := bot.NewBlazeClient(config.MixinClientId, config.MixinSessionId, config.MixinPrivateKey)
+		r := ResponseMessage{
+			client: blazeClient,
+		}
+		if err := blazeClient.Loop(ctx, r); err != nil {
 			session.Logger(ctx).Error(err)
 		}
 		session.Logger(ctx).Info("connection loop end")
