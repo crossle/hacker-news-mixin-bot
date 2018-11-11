@@ -13,7 +13,7 @@ type ResponseMessage struct {
 	client *bot.BlazeClient
 }
 
-func (r ResponseMessage) OnMessage(ctx context.Context, msg bot.MessageView, uid string) error {
+func (r *ResponseMessage) OnMessage(ctx context.Context, msg bot.MessageView, uid string) error {
 	if msg.Category != bot.MessageCategorySystemAccountSnapshot && msg.Category != bot.MessageCategorySystemConversation && msg.ConversationId == bot.UniqueConversationId(config.MixinClientId, msg.UserId) {
 		if msg.Category == "PLAIN_TEXT" {
 			data, err := base64.StdEncoding.DecodeString(msg.Data)

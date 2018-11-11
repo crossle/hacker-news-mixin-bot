@@ -24,7 +24,7 @@ func StartBlaze(db *sql.DB) error {
 
 	for {
 		blazeClient := bot.NewBlazeClient(config.MixinClientId, config.MixinSessionId, config.MixinPrivateKey)
-		r := ResponseMessage{
+		r := &ResponseMessage{
 			client: blazeClient,
 		}
 		if err := blazeClient.Loop(ctx, r); err != nil {
