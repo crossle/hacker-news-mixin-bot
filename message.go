@@ -35,15 +35,25 @@ func (r *ResponseMessage) OnMessage(ctx context.Context, msg bot.MessageView, ui
 					}
 				}
 			} else {
-				content := `发送 /start 订阅消息
-发送 /stop 取消订阅`
-				if err := r.client.SendPlainText(ctx, msg, content); err != nil {
+				content := `请更新 Mixin Messenger 到最新版本 0.14.1+`
+				if err := r.client.SendAppButton(ctx, msg.ConversationId, msg.UserId, "点我订阅", "input:/start", "#AA4848"); err != nil {
+					return bot.BlazeServerError(ctx, err)
+				}
+				if err := r.client.SendAppButton(ctx, msg.ConversationId, msg.UserId, "点我取消订阅", "input:/stop", "#AA4848"); err != nil {
+					return bot.BlazeServerError(ctx, err)
+				}
+				if err = r.client.SendPlainText(ctx, msg, content); err != nil {
 					return bot.BlazeServerError(ctx, err)
 				}
 			}
 		} else {
-			content := `发送 /start 订阅消息
-发送 /stop 取消订阅`
+			content := `请更新 Mixin Messenger 到最新版本 0.14.1+`
+			if err := r.client.SendAppButton(ctx, msg.ConversationId, msg.UserId, "点我订阅", "input:/start", "#AA4848"); err != nil {
+				return bot.BlazeServerError(ctx, err)
+			}
+			if err := r.client.SendAppButton(ctx, msg.ConversationId, msg.UserId, "点我取消订阅", "input:/stop", "#AA4848"); err != nil {
+				return bot.BlazeServerError(ctx, err)
+			}
 			if err := r.client.SendPlainText(ctx, msg, content); err != nil {
 				return bot.BlazeServerError(ctx, err)
 			}
