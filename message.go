@@ -13,6 +13,13 @@ type ResponseMessage struct {
 	client *bot.BlazeClient
 }
 
+func (r *ResponseMessage) OnAckReceipt(ctx context.Context, msg bot.MessageView, userID string) error {
+	return nil
+}
+func (r *ResponseMessage) SyncAck() bool {
+	return true
+}
+
 func (r *ResponseMessage) OnMessage(ctx context.Context, msg bot.MessageView, uid string) error {
 	if msg.Category != bot.MessageCategorySystemAccountSnapshot && msg.Category != bot.MessageCategorySystemConversation && msg.ConversationId == bot.UniqueConversationId(config.MixinClientId, msg.UserId) {
 		if msg.Category == "PLAIN_TEXT" {

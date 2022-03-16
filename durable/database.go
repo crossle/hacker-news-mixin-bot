@@ -6,11 +6,11 @@ import (
 	"log"
 
 	"github.com/crossle/hacker-news-mixin-bot/config"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 func OpenDatabaseClient(ctx context.Context) *sql.DB {
-	db, err := sql.Open("sqlite3", config.DatabasePath)
+	db, err := sql.Open("sqlite", config.DatabasePath)
 	if err != nil {
 		log.Fatal(err)
 	}
