@@ -1,6 +1,6 @@
 module github.com/crossle/hacker-news-mixin-bot
 
-go 1.17
+go 1.20
 
 require (
 	cloud.google.com/go/logging v1.4.2
